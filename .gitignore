@@ -4,5 +4,6 @@ __pycache__/
 
 data/raw/*.log
 data/processed/*.csv
+data/processed/*.json
 
 models/
