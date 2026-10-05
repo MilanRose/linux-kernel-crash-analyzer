@@ -1,0 +1,13 @@
+BUG: unable to handle page fault for address: ffff888012345678
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+Oops: 0000 [#1] SMP
+CPU: 2 PID: 1847 Comm: example_process
+RIP: 0010:driver_function+0x20/0x80
+Call Trace:
+ <TASK>
+ device_operation+0x45/0x90
+ driver_function+0x20/0x80
+ process_request+0x30/0x70
+ </TASK>
+Modules linked in: example_driver
