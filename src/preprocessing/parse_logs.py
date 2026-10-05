@@ -82,6 +82,55 @@ def extract_pid(log):
 
     return None
 
+def extract_cpu(log):
+    """
+    Extract CPU number from the crash log.
+    """
+
+    match = re.search(r"CPU:\s*(\d+)", log)
+
+    if match:
+        return int(match.group(1))
+
+    return None
+
+def extract_address(log):
+    """
+    Extract the memory address involved in the crash.
+    """
+
+    match = re.search(r"address:\s*([0-9a-fA-Fx]+)", log)
+
+    if match:
+        return match.group(1)
+
+    return "UNKNOWN"
+
+def extract_call_trace(log):
+    """
+    Extract the function call trace from the crash log.
+    """
+
+    match = re.search(
+        r"Call Trace:\s*(.*?)(?:\nModules linked in:|\Z)",
+        log,
+        re.DOTALL
+    )
+
+    if not match:
+        return []
+
+    lines = match.group(1).splitlines()
+
+    call_trace = []
+
+    for line in lines:
+        line = line.strip()
+
+        if line:
+            call_trace.append(line)
+
+    return call_trace
 
 def determine_severity(error_type):
     """
@@ -120,6 +169,9 @@ def parse_log(log_path):
         "Function": extract_function(log),
         "Process": extract_process(log),
         "PID": extract_pid(log),
+        "CPU": extract_cpu(log),
+        "Call_Trace": extract_call_trace(log),
+        "Address": extract_address(log),
         "Severity": determine_severity(error_type),
         "Raw_Log": log
     }
